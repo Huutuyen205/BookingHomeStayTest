@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Thêm phòng')}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+<div class="container mt-4" style="max-width:600px;">
+    <h3>Thông tin phòng</h3>
+    <form th:action="@{/chu-nha/homestay/{id}/phong/luu(id=${homestayId})}" th:object="${roomForm}" method="post">
+        <input type="hidden" th:field="*{id}">
+        <div class="mb-2"><label>Tên phòng</label><input class="form-control" th:field="*{name}" required></div>
+        <div class="mb-2"><label>Giá/đêm (VND)</label><input type="number" min="1000" step="1000" class="form-control" th:field="*{pricePerNight}" required></div>
+        <div class="mb-2"><label>Số khách tối đa</label><input type="number" min="1" class="form-control" th:field="*{maxGuests}" required></div>
+        <div class="mb-2"><label>Mô tả</label><textarea class="form-control" th:field="*{description}"></textarea></div>
+        <button class="btn btn-tv w-100" type="submit">Lưu phòng</button>
+    </form>
+</div>
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+</body>
+</html>

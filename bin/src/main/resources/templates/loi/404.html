@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Không tìm thấy trang')}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+<div class="container py-5 text-center my-5" style="max-width: 540px;">
+    <div class="d-inline-flex align-items-center justify-content-center bg-danger-subtle text-danger rounded-circle mb-3" style="width: 80px; height: 80px;">
+        <i class="fa-solid fa-compass display-5"></i>
+    </div>
+    <h1 class="display-3 fw-bold text-dark mb-2">404</h1>
+    <h4 class="fw-bold mb-3">Trang bạn tìm kiếm không tồn tại</h4>
+    <p class="text-muted small mb-4" th:text="${message} ?: 'Đường dẫn này có thể đã bị thay đổi hoặc không còn khả dụng.'">Không tìm thấy nội dung yêu cầu.</p>
+    <a th:href="@{/}" class="btn btn-primary btn-pill px-4 py-2">
+        <i class="fa-solid fa-house-chimney me-2"></i> Quay về Trang chủ
+    </a>
+</div>
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+</body>
+</html>

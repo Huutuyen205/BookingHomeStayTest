@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Duyệt Host')}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+<div class="container mt-4">
+    <h3>Host chờ duyệt</h3>
+    <table class="table bg-white">
+        <thead><tr><th>Tên doanh nghiệp</th><th>Chủ tài khoản</th><th>Email</th><th>Hành động</th></tr></thead>
+        <tbody>
+        <tr th:each="h : ${hosts}">
+            <td th:text="${h.businessName}">Tên</td>
+            <td th:text="${h.user.fullName}">Chủ</td>
+            <td th:text="${h.user.email}">Email</td>
+            <td>
+                <form th:action="@{/quan-tri/chu-nha/{id}/duyet(id=${h.id})}" method="post" class="d-inline">
+                    <button class="btn btn-sm btn-success">Duyệt</button>
+                </form>
+                <form th:action="@{/quan-tri/chu-nha/{id}/tu-choi(id=${h.id})}" method="post" class="d-inline">
+                    <button class="btn btn-sm btn-danger">Từ chối</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <p th:if="${hosts.isEmpty()}" class="text-muted">Không có Host nào đang chờ duyệt.</p>
+</div>
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+</body>
+</html>

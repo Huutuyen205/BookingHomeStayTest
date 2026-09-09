@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Lịch sử đặt phòng')}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold m-0"><i class="fa-regular fa-calendar-check text-danger me-2"></i>Lịch Sử Đặt Phòng</h3>
+            <p class="text-muted small m-0">Quản lý và theo dõi trạng thái các kỳ nghỉ của bạn</p>
+        </div>
+        <a th:href="@{/tim-kiem}" class="btn btn-primary btn-pill btn-sm px-3">
+            <i class="fa-solid fa-magnifying-glass me-1"></i> Khám phá thêm homestay
+        </a>
+    </div>
+
+    <!-- Bookings Table Container -->
+    <div class="table-container-modern shadow-sm border-0 rounded-4" th:if="${!bookings.isEmpty()}">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Mã đơn</th>
+                        <th>Chỗ nghỉ & Phòng</th>
+                        <th>Lịch lưu trú</th>
+                        <th>Tổng chi phí</th>
+                        <th>Trạng thái</th>
+                        <th class="text-end">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="b : ${bookings}">
+                        <td>
+                            <span class="fw-bold text-dark" th:text="${b.bookingCode}">BK001</span>
+                        </td>
+                        <td>
+                            <div class="fw-semibold text-dark" th:text="${b.details[0].room.homestay.name}">Tên Homestay</div>
+                            <div class="small text-muted" th:text="${b.details[0].room.name}">Tên phòng</div>
+                        </td>
+                        <td>
+                            <div class="small fw-semibold text-dark">
+                                <i class="fa-regular fa-calendar me-1 text-primary"></i>
+                                <span th:text="${b.details[0].checkinDate}">2026-06-01</span> 
+                                <i class="fa-solid fa-arrow-right mx-1 text-muted small"></i> 
+                                <span th:text="${b.details[0].checkoutDate}">2026-06-03</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="fw-bold text-danger" th:text="${#numbers.formatDecimal(b.finalAmount,0,'POINT',0,'COMMA')} + ' VNĐ'">1,200,000 VNĐ</span>
+                        </td>
+                        <td>
+                            <span class="badge" th:classappend="'badge-status-' + ${b.status}" th:text="${b.status}">PENDING</span>
+                        </td>
+                        <td class="text-end">
+                            <form th:if="${b.status.name() == 'PENDING' or b.status.name() == 'CONFIRMED'}"
+                                  th:action="@{/khach-hang/don-dat-phong/{id}/huy(id=${b.id})}" method="post" class="d-inline">
+                                <button class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="return confirm('Bạn có chắc chắn muốn hủy đơn đặt phòng này?')">
+                                    <i class="fa-solid fa-xmark me-1"></i> Hủy đơn
+                                </button>
+                            </form>
+                            <span th:unless="${b.status.name() == 'PENDING' or b.status.name() == 'CONFIRMED'}" class="text-muted small">--</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Empty State -->
+    <div th:if="${bookings.isEmpty()}" class="p-5 text-center bg-white rounded-4 border">
+        <i class="fa-regular fa-calendar-xmark display-4 text-muted mb-3"></i>
+        <h5 class="fw-bold">Bạn chưa có đơn đặt phòng nào</h5>
+        <p class="text-muted small mb-4">Hãy bắt đầu chuyến phiêu lưu tiếp theo của bạn ngay hôm nay!</p>
+        <a th:href="@{/}" class="btn btn-primary btn-pill px-4">
+            <i class="fa-solid fa-compass me-1"></i> Khám phá chỗ ở ngay
+        </a>
+    </div>
+</div>
+
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+</body>
+</html>

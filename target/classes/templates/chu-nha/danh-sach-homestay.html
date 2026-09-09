@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Homestay của tôi')}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+<div class="container py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div>
+            <h3 class="fw-bold m-0"><i class="fa-solid fa-hotel text-danger me-2"></i>Danh Sách Homestay Của Tôi</h3>
+            <p class="text-muted small m-0">Quản lý và cập nhật thông tin các cơ sở lưu trú của bạn</p>
+        </div>
+        <a th:href="@{/chu-nha/homestay/them-moi}" class="btn btn-primary btn-pill btn-sm px-3 mt-2 mt-md-0">
+            <i class="fa-solid fa-plus me-1"></i> Thêm Homestay mới
+        </a>
+    </div>
+
+    <div class="table-container-modern shadow-sm border-0 rounded-4" th:if="${!homestays.isEmpty()}">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Tên Homestay</th>
+                        <th>Khu vực (Tỉnh/Thành)</th>
+                        <th>Trạng thái duyệt</th>
+                        <th class="text-end">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="h : ${homestays}">
+                        <td>
+                            <div class="fw-bold text-dark" th:text="${h.name}">Tên Homestay</div>
+                        </td>
+                        <td th:text="${h.province}">Đà Lạt</td>
+                        <td>
+                            <span class="badge" th:classappend="'badge-status-' + ${h.status}" th:text="${h.status}">ACTIVE</span>
+                        </td>
+                        <td class="text-end">
+                            <a th:href="@{/chu-nha/homestay/{id}/phong(id=${h.id})}" class="btn btn-sm btn-outline-custom rounded-pill px-3">
+                                <i class="fa-solid fa-bed me-1 text-primary"></i> Quản lý phòng
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div th:if="${homestays.isEmpty()}" class="p-5 text-center bg-white rounded-4 border">
+        <i class="fa-solid fa-house-chimney-medical display-4 text-muted mb-3"></i>
+        <h5 class="fw-bold">Bạn chưa đăng ký Homestay nào</h5>
+        <p class="text-muted small mb-4">Hãy bắt đầu tạo homestay đầu tiên để tiếp cận khách hàng tiềm năng!</p>
+        <a th:href="@{/chu-nha/homestay/them-moi}" class="btn btn-primary btn-pill px-4">
+            <i class="fa-solid fa-plus me-1"></i> Thêm Homestay ngay
+        </a>
+    </div>
+</div>
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+</body>
+</html>

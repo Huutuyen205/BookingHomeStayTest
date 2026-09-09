@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Booking của tôi')}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+<div class="container mt-4">
+    <h3>Danh sách Booking</h3>
+    <table class="table bg-white">
+        <thead><tr><th>Mã đơn</th><th>Khách</th><th>Phòng</th><th>Ngày ở</th><th>Trạng thái</th><th>Hành động</th></tr></thead>
+        <tbody>
+        <tr th:each="b : ${bookings}">
+            <td th:text="${b.bookingCode}">BK001</td>
+            <td th:text="${b.customerName}">Khách</td>
+            <td th:text="${b.details[0].room.name}">Phòng</td>
+            <td th:text="${b.details[0].checkinDate} + ' → ' + ${b.details[0].checkoutDate}">Ngày</td>
+            <td><span class="badge" th:classappend="'badge-status-' + ${b.status}" th:text="${b.status}"></span></td>
+            <td>
+                <form th:if="${b.status.name() == 'PENDING'}" th:action="@{/chu-nha/don-dat-phong/{id}/xac-nhan(id=${b.id})}" method="post" class="d-inline">
+                    <button class="btn btn-sm btn-success">Xác nhận</button>
+                </form>
+                <form th:if="${b.status.name() == 'PENDING'}" th:action="@{/chu-nha/don-dat-phong/{id}/tu-choi(id=${b.id})}" method="post" class="d-inline">
+                    <button class="btn btn-sm btn-danger">Từ chối</button>
+                </form>
+                <form th:if="${b.status.name() == 'CONFIRMED'}" th:action="@{/chu-nha/don-dat-phong/{id}/nhan-phong(id=${b.id})}" method="post" class="d-inline">
+                    <button class="btn btn-sm btn-info">Check-in</button>
+                </form>
+                <form th:if="${b.status.name() == 'CHECKED_IN'}" th:action="@{/chu-nha/don-dat-phong/{id}/tra-phong(id=${b.id})}" method="post" class="d-inline">
+                    <button class="btn btn-sm btn-secondary">Check-out</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+</body>
+</html>

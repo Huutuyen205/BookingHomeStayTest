@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!--
+    Task 11: Danh sach ĐẦY ĐỦ 63 tỉnh/thành Việt Nam (theo địa giới TRƯỚC thời điểm
+    sáp nhập tỉnh thành, đúng như người dùng yêu cầu - KHÔNG dùng danh sách 34 tỉnh/thành
+    sau sáp nhập). Dùng th:replace="~{dung-chung/danh-sach-tinh :: options(selected=${province})}"
+    để nhúng vào bất kỳ thẻ <select> nào cần chọn tỉnh/thành.
+-->
+<th:block th:fragment="options(selected)">
+    <option value="">-- Chọn tỉnh/thành --</option>
+    <option th:each="tinh : ${T(java.util.List).of(
+        'An Giang','Bà Rịa - Vũng Tàu','Bạc Liêu','Bắc Giang','Bắc Kạn','Bắc Ninh','Bến Tre',
+        'Bình Dương','Bình Định','Bình Phước','Bình Thuận','Cà Mau','Cần Thơ','Cao Bằng',
+        'Đà Nẵng','Đắk Lắk','Đắk Nông','Điện Biên','Đồng Nai','Đồng Tháp','Gia Lai','Hà Giang',
+        'Hà Nam','Hà Nội','Hà Tĩnh','Hải Dương','Hải Phòng','Hậu Giang','Hòa Bình',
+        'Thành phố Hồ Chí Minh','Hưng Yên','Khánh Hòa','Kiên Giang','Kon Tum','Lai Châu',
+        'Lâm Đồng','Lạng Sơn','Lào Cai','Long An','Nam Định','Nghệ An','Ninh Bình',
+        'Ninh Thuận','Phú Thọ','Phú Yên','Quảng Bình','Quảng Nam','Quảng Ngãi','Quảng Ninh',
+        'Quảng Trị','Sóc Trăng','Sơn La','Tây Ninh','Thái Bình','Thái Nguyên','Thanh Hóa',
+        'Thừa Thiên Huế','Tiền Giang','Trà Vinh','Tuyên Quang','Vĩnh Long','Vĩnh Phúc','Yên Bái'
+        )}"
+        th:value="${tinh}" th:text="${tinh}" th:selected="${tinh == selected}">Tỉnh</option>
+</th:block>
+</body>
+</html>

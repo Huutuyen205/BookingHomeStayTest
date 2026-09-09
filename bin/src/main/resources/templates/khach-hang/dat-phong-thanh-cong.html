@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Đặt phòng thành công')}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+
+<div class="container py-5" style="max-width: 580px;">
+    <!-- Success Animated Icon -->
+    <div class="text-center mb-4">
+        <div class="d-inline-flex align-items-center justify-content-center bg-success-subtle text-success rounded-circle mb-3"
+             style="width: 76px; height: 76px; animation: pulseGlow 2s infinite;">
+            <i class="fa-solid fa-check display-5"></i>
+        </div>
+        <h3 class="fw-bold mb-1 text-dark">Đặt Phòng Thành Công!</h3>
+        <p class="text-muted small">Cảm ơn bạn đã lựa chọn BookingHomeStay. Thông tin đơn đã được lưu vào hệ thống.</p>
+    </div>
+
+    <!-- Booking Ticket Card -->
+    <div class="card border-0 shadow-lg rounded-4 overflow-hidden mb-4">
+        <div class="p-4 bg-dark text-white d-flex justify-content-between align-items-center">
+            <div>
+                <small class="text-white-50 text-uppercase letter-spacing-1">Mã đơn đặt phòng</small>
+                <h4 class="fw-bold m-0 text-warning" th:text="${booking.bookingCode}">BK12345678</h4>
+            </div>
+            <span class="badge bg-success-subtle text-success px-3 py-2">Đã tiếp nhận</span>
+        </div>
+
+        <div class="p-4">
+            <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted small">Tạm tính tiền phòng</span>
+                <span class="fw-semibold" th:text="${#numbers.formatDecimal(booking.totalAmount,0,'POINT',0,'COMMA')} + ' VNĐ'">1,500,000 VNĐ</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2 text-success" th:if="${booking.discountAmount.compareTo(T(java.math.BigDecimal).ZERO) > 0}">
+                <span class="small"><i class="fa-solid fa-tag me-1"></i>Giảm giá voucher</span>
+                <span class="fw-semibold" th:text="'-' + ${#numbers.formatDecimal(booking.discountAmount,0,'POINT',0,'COMMA')} + ' VNĐ'">-100,000 VNĐ</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted small">Phí dịch vụ & Quản trị</span>
+                <span class="fw-semibold" th:text="${#numbers.formatDecimal(booking.serviceFee,0,'POINT',0,'COMMA')} + ' VNĐ'">0 VNĐ</span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="fw-bold text-dark">Tổng thanh toán:</span>
+                <span class="fs-4 fw-bold text-danger" th:text="${#numbers.formatDecimal(booking.finalAmount,0,'POINT',0,'COMMA')} + ' VNĐ'">1,400,000 VNĐ</span>
+            </div>
+        </div>
+
+        <!-- VietQR Transfer Section -->
+        <div class="p-4 bg-light border-top text-center" th:if="${qrCodeUrl}">
+            <h6 class="fw-bold text-dark mb-2"><i class="fa-solid fa-qrcode me-2 text-primary"></i>Quét mã VietQR để thanh toán</h6>
+            <p class="text-muted small mb-3">Mở app Ngân hàng hoặc MoMo, quét mã bên dưới để tự động điền số tiền và nội dung chuyển khoản.</p>
+            <div class="p-3 bg-white d-inline-block rounded-3 shadow-sm border mb-3">
+                <img th:src="${qrCodeUrl}" alt="Mã VietQR" class="img-fluid" style="max-width: 240px;">
+            </div>
+            <div class="small text-muted">
+                <i class="fa-solid fa-circle-info text-info me-1"></i>Đơn đặt phòng sẽ được tự động cập nhật sau khi hệ thống nhận được chuyển khoản.
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="d-flex gap-2">
+        <a th:href="@{/khach-hang/don-dat-phong}" class="btn btn-primary btn-pill flex-grow-1 py-2 fw-bold">
+            <i class="fa-regular fa-calendar-check me-1"></i> Xem đơn của tôi
+        </a>
+        <a th:href="@{/}" class="btn btn-outline-custom btn-pill px-4 py-2">
+            Trang chủ
+        </a>
+    </div>
+</div>
+
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+</body>
+</html>

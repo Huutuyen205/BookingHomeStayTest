@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Kênh Đối Tác - Chủ Nhà')}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div>
+            <h3 class="fw-bold m-0"><i class="fa-solid fa-store text-danger me-2"></i>Kênh Quản Trị Dành Cho Đối Tác</h3>
+            <p class="text-muted small m-0">Tổng quan tình hình kinh doanh, homestay và các đơn đặt phòng của bạn</p>
+        </div>
+        <div class="d-flex gap-2 mt-3 mt-md-0">
+            <a th:href="@{/chu-nha/homestay/moi}" class="btn btn-primary btn-pill btn-sm px-3">
+                <i class="fa-solid fa-plus me-1"></i> Đăng ký Homestay mới
+            </a>
+        </div>
+    </div>
+
+    <!-- Metric Stat Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card p-4 border-0 shadow-sm rounded-4 hover-lift" style="background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-uppercase small fw-bold text-muted">Homestay quản lý</span>
+                        <h2 class="display-6 fw-bold text-dark my-2" th:text="${homestays.size()}">0</h2>
+                        <span class="small text-primary fw-semibold"><i class="fa-solid fa-arrow-trend-up me-1"></i>Đang hoạt động</span>
+                    </div>
+                    <div class="p-3 bg-white rounded-circle shadow-sm text-primary fs-3">
+                        <i class="fa-solid fa-house-chimney"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 border-0 shadow-sm rounded-4 hover-lift" style="background: linear-gradient(135deg, #ffffff 0%, #fffbeb 100%);">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-uppercase small fw-bold text-muted">Đơn chờ xác nhận</span>
+                        <h2 class="display-6 fw-bold text-dark my-2" th:text="${#lists.size(bookings.?[status.name() == 'PENDING'])}">0</h2>
+                        <span class="small text-warning fw-semibold"><i class="fa-solid fa-clock me-1"></i>Cần xử lý ngay</span>
+                    </div>
+                    <div class="p-3 bg-white rounded-circle shadow-sm text-warning fs-3">
+                        <i class="fa-solid fa-hourglass-half"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 border-0 shadow-sm rounded-4 hover-lift" style="background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-uppercase small fw-bold text-muted">Tổng số lượt đặt</span>
+                        <h2 class="display-6 fw-bold text-dark my-2" th:text="${bookings.size()}">0</h2>
+                        <span class="small text-success fw-semibold"><i class="fa-solid fa-circle-check me-1"></i>Tất cả các kỳ</span>
+                    </div>
+                    <div class="p-3 bg-white rounded-circle shadow-sm text-success fs-3">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Navigation Buttons -->
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="card p-4 border-0 shadow-sm rounded-4">
+                <h5 class="fw-bold mb-2"><i class="fa-solid fa-hotel text-primary me-2"></i>Quản lý danh sách Homestay</h5>
+                <p class="text-muted small mb-3">Xem chi tiết, cập nhật hình ảnh, chỉnh sửa mô tả hoặc quản lý các phòng của từng homestay.</p>
+                <a th:href="@{/chu-nha/danh-sach-homestay}" class="btn btn-outline-custom btn-pill align-self-start">
+                    Xem danh sách homestay <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-4 border-0 shadow-sm rounded-4">
+                <h5 class="fw-bold mb-2"><i class="fa-solid fa-receipt text-success me-2"></i>Quản lý đơn đặt phòng</h5>
+                <p class="text-muted small mb-3">Theo dõi lịch khách đến, xác nhận duyệt đơn đặt phòng hoặc cập nhật trạng thái thanh toán.</p>
+                <a th:href="@{/chu-nha/don-dat-phong}" class="btn btn-outline-custom btn-pill align-self-start">
+                    Xem đơn đặt phòng <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+</body>
+</html>

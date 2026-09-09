@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Trang chủ - Trải nghiệm Homestay đỉnh cao')}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+
+<!-- Hero Banner & Floating Search Capsule (Airbnb Luxury Style) -->
+<section class="hero-section-modern">
+    <div class="container text-center position-relative" style="z-index: 2;">
+        <div class="hero-badge">
+            <i class="fa-solid fa-sparkles text-warning"></i>
+            <span>Hơn 5,000+ Homestay & Villa Nghỉ Dưỡng Khắp Việt Nam</span>
+        </div>
+        <h1 class="hero-title">
+            Tìm Chỗ Ở <span class="gradient-text">Hoàn Hảo</span><br>Cho Kỳ Nghỉ Của Bạn
+        </h1>
+        <p class="hero-subtitle">
+            Trải nghiệm không gian ấm cúng, thiết kế độc bản và lưu giữ những khoảnh khắc đáng nhớ cùng người thân.
+        </p>
+
+        <!-- Floating Search Capsule Card -->
+        <div class="search-capsule-card">
+            <form th:action="@{/tim-kiem}" method="get" class="row g-2 align-items-center text-start">
+                <div class="col-lg-4 col-md-12">
+                    <div class="search-field-box">
+                        <label class="search-field-label">
+                            <i class="fa-solid fa-location-dot text-danger"></i> Điểm đến
+                        </label>
+                        <input type="text" name="province" list="dsTinh" class="form-control search-field-input" 
+                               placeholder="Bạn muốn đi đâu? (Đà Lạt, Sa Pa...)" autocomplete="off">
+                        <datalist id="dsTinh">
+                            <th:block th:replace="~{dung-chung/danh-sach-tinh :: options(selected=null)}"></th:block>
+                        </datalist>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-6">
+                    <div class="search-field-box">
+                        <label class="search-field-label">
+                            <i class="fa-regular fa-calendar-check text-primary"></i> Nhận phòng
+                        </label>
+                        <input type="date" name="checkIn" class="form-control search-field-input">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-6">
+                    <div class="search-field-box">
+                        <label class="search-field-label">
+                            <i class="fa-regular fa-calendar-xmark text-primary"></i> Trả phòng
+                        </label>
+                        <input type="date" name="checkOut" class="form-control search-field-input">
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-12">
+                    <button type="submit" class="btn-search-capsule">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span>Tìm kiếm</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Quick Destination Chips -->
+        <div class="quick-chips-wrap">
+            <span class="text-white-50 small me-2"><i class="fa-solid fa-fire me-1 text-warning"></i>Gợi ý hot:</span>
+            <a th:href="@{/tim-kiem(province='Đà Lạt')}" class="quick-chip-item">Đà Lạt</a>
+            <a th:href="@{/tim-kiem(province='Sa Pa')}" class="quick-chip-item">Sa Pa</a>
+            <a th:href="@{/tim-kiem(province='Vũng Tàu')}" class="quick-chip-item">Vũng Tàu</a>
+            <a th:href="@{/tim-kiem(province='Đà Nẵng')}" class="quick-chip-item">Đà Nẵng</a>
+            <a th:href="@{/tim-kiem(province='Hà Nội')}" class="quick-chip-item">Hà Nội</a>
+            <a th:href="@{/tim-kiem(province='Phú Quốc')}" class="quick-chip-item">Phú Quốc</a>
+            <a th:href="@{/tim-kiem(province='Ninh Bình')}" class="quick-chip-item">Ninh Bình</a>
+        </div>
+    </div>
+</section>
+
+<!-- Category Navigation Bar (Horizontal Scrollable) -->
+<div class="category-bar-wrapper">
+    <div class="container">
+        <div class="category-scroll-container">
+            <a th:href="@{/tim-kiem}" class="category-pill-item active">
+                <i class="fa-solid fa-fire"></i>
+                <span>Tất cả</span>
+            </a>
+            <a th:href="@{/tim-kiem(province='Đà Lạt')}" class="category-pill-item">
+                <i class="fa-solid fa-cloud-sun"></i>
+                <span>Săn mây view đồi</span>
+            </a>
+            <a th:href="@{/tim-kiem(province='Vũng Tàu')}" class="category-pill-item">
+                <i class="fa-solid fa-water-ladder"></i>
+                <span>Bể bơi vô cực</span>
+            </a>
+            <a th:href="@{/tim-kiem(province='Đà Nẵng')}" class="category-pill-item">
+                <i class="fa-solid fa-umbrella-beach"></i>
+                <span>Gần bãi biển</span>
+            </a>
+            <a th:href="@{/tim-kiem(province='Sa Pa')}" class="category-pill-item">
+                <i class="fa-solid fa-mountain"></i>
+                <span>Nhà gỗ & Núi rừng</span>
+            </a>
+            <a th:href="@{/tim-kiem(province='Hà Nội')}" class="category-pill-item">
+                <i class="fa-solid fa-city"></i>
+                <span>Căn hộ trung tâm</span>
+            </a>
+            <a th:href="@{/tim-kiem}" class="category-pill-item">
+                <i class="fa-solid fa-campground"></i>
+                <span>Glamping & Lều</span>
+            </a>
+            <a th:href="@{/tim-kiem}" class="category-pill-item">
+                <i class="fa-solid fa-paw"></i>
+                <span>Thú cưng đi cùng</span>
+            </a>
+            <a th:href="@{/tim-kiem}" class="category-pill-item">
+                <i class="fa-solid fa-utensils"></i>
+                <span>Bếp & Tiệc BBQ</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Section: Điểm đến thịnh hành (Popular Destinations) -->
+<section class="container py-5 my-2">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+            <span class="text-uppercase fw-bold small text-danger letter-spacing-1">Khám phá Việt Nam</span>
+            <h2 class="fw-bold m-0 mt-1">Điểm Đến Hàng Đầu Được Yêu Thích</h2>
+        </div>
+        <a th:href="@{/tim-kiem}" class="btn btn-sm btn-outline-custom rounded-pill px-3 d-none d-md-inline-flex">
+            Xem tất cả điểm đến <i class="fa-solid fa-arrow-right ms-1"></i>
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-3 col-md-6 col-6">
+            <a th:href="@{/tim-kiem(province='Đà Lạt')}" class="destination-card-modern">
+                <img th:src="@{/images/gallery1.png}" alt="Đà Lạt">
+                <div class="destination-card-overlay">
+                    <div class="destination-name">Đà Lạt</div>
+                    <div class="destination-count">Thành phố ngàn hoa & sương mù</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-6 col-6">
+            <a th:href="@{/tim-kiem(province='Hà Nội')}" class="destination-card-modern">
+                <img th:src="@{/images/gallery2.png}" alt="Hà Nội">
+                <div class="destination-card-overlay">
+                    <div class="destination-name">Hà Nội</div>
+                    <div class="destination-count">Nét cổ kính & văn hóa ẩm thực</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-6 col-6">
+            <a th:href="@{/tim-kiem(province='Đà Nẵng')}" class="destination-card-modern">
+                <img th:src="@{/images/gallery3.png}" alt="Đà Nẵng">
+                <div class="destination-card-overlay">
+                    <div class="destination-name">Đà Nẵng</div>
+                    <div class="destination-count">Thành phố biển đáng sống nhất</div>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-6 col-6">
+            <a th:href="@{/tim-kiem(province='Sa Pa')}" class="destination-card-modern">
+                <img th:src="@{/images/gallery4.png}" alt="Sa Pa">
+                <div class="destination-card-overlay">
+                    <div class="destination-name">Sa Pa</div>
+                    <div class="destination-count">Chạm tay vào mây ngàn Tây Bắc</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Section: Homestay nổi bật (Featured Homestays) -->
+<section class="container py-4 my-2">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+            <span class="text-uppercase fw-bold small text-danger letter-spacing-1">Gợi ý dành riêng cho bạn</span>
+            <h2 class="fw-bold m-0 mt-1">Homestay Nổi Bật Được Đánh Giá Cao</h2>
+        </div>
+        <a th:href="@{/tim-kiem}" class="btn btn-sm btn-outline-custom rounded-pill px-3">
+            Xem thêm chỗ ở <i class="fa-solid fa-arrow-right ms-1"></i>
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <!-- Render danh sách Homestay từ Controller -->
+        <div class="col-lg-4 col-md-6" th:each="home : ${featuredHomestays}">
+            <div class="card-homestay-modern">
+                <div class="card-image-wrap">
+                    <span class="card-badge-province" th:text="${home.province}">Đà Lạt</span>
+                    <button type="button" class="btn-wishlist" onclick="toggleWishlist(this)" title="Lưu vào danh sách yêu thích">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+                    <a th:href="@{/homestay/{slug}(slug=${home.slug})}">
+                        <img th:if="${!home.images.isEmpty()}" th:src="${home.images[0].imageUrl}" th:alt="${home.name}">
+                        <img th:unless="${!home.images.isEmpty()}" th:src="@{/images/gallery5.png}" th:alt="${home.name}">
+                    </a>
+                </div>
+                <div class="card-body-content">
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="card-rating-badge"><i class="fa-solid fa-star"></i> 4.9 <span class="text-muted small fw-normal">(38 đánh giá)</span></span>
+                        <span class="badge bg-success-subtle text-success small">Yêu thích nhất</span>
+                    </div>
+                    <a th:href="@{/homestay/{slug}(slug=${home.slug})}" class="text-decoration-none">
+                        <h3 class="card-homestay-title text-truncate" th:text="${home.name}">Villa Mộng Mơ Đà Lạt</h3>
+                    </a>
+                    <div class="card-homestay-address text-truncate">
+                        <i class="fa-solid fa-location-dot text-danger"></i>
+                        <span th:text="${home.address}">123 Đường Mai Anh Đào</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-auto pt-3 border-top">
+                        <div class="card-price-block">
+                            <span class="card-price-amount">Giá ưu đãi</span>
+                            <span class="card-price-unit">/ đêm</span>
+                        </div>
+                        <a th:href="@{/homestay/{slug}(slug=${home.slug})}" class="btn btn-primary btn-sm btn-pill px-3">
+                            Xem phòng <i class="fa-solid fa-angle-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Section: Vì sao chọn BookingHomeStay (Why Choose Us) -->
+<section class="py-5 my-4" style="background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%); border-top: 1px solid var(--bhs-line); border-bottom: 1px solid var(--bhs-line);">
+    <div class="container py-3">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="text-uppercase fw-bold small text-danger letter-spacing-1">Giá trị mang lại</span>
+            <h2 class="fw-bold mt-1">Tại Sao Nên Đặt Chỗ Tại BookingHomeStay?</h2>
+            <p class="text-muted">Mang đến sự an tâm tuyệt đối cho từng chuyến đi với tiêu chuẩn chất lượng khắt khe nhất.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="feature-card-modern">
+                    <div class="feature-icon-box">
+                        <i class="fa-solid fa-tags"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Giá Tốt Nhất & Minh Bạch</h5>
+                    <p class="text-muted small m-0">Cam kết giá niêm yết trực tiếp từ chủ nhà, không phụ phí ẩn, tích lũy điểm thưởng cho chuyến đi sau.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="feature-card-modern">
+                    <div class="feature-icon-box">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">100% Ảnh Thực Tế Đã Duyệt</h5>
+                    <p class="text-muted small m-0">Đội ngũ của chúng tôi kiểm duyệt trực tiếp từng chỗ nghỉ để đảm bảo hình ảnh chuẩn xác như thực tế.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="feature-card-modern">
+                    <div class="feature-icon-box">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Xác Nhận Đặt Phòng Tức Thì</h5>
+                    <p class="text-muted small m-0">Hệ thống xử lý nhanh chóng trong vài giây, hỗ trợ mã QR thanh toán VietQR quét tự động siêu tiện lợi.</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="feature-card-modern">
+                    <div class="feature-icon-box">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Chăm Sóc Khách Hàng 24/7</h5>
+                    <p class="text-muted small m-0">Luôn đồng hành hỗ trợ bạn trước, trong và sau kỳ nghỉ qua Hotline, Zalo, Messenger bất kỳ lúc nào.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Section: Cảm nhận du khách (Testimonials) -->
+<section class="container py-5 my-2">
+    <div class="text-center max-w-700 mx-auto mb-5">
+        <span class="text-uppercase fw-bold small text-danger letter-spacing-1">Ý kiến cộng đồng</span>
+        <h2 class="fw-bold mt-1">Khách Hàng Nói Gì Về Chúng Tôi?</h2>
+        <p class="text-muted">Hơn 50,000+ du khách đã có những kỳ nghỉ khó quên cùng BookingHomeStay.</p>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card p-4 h-100 border-0 shadow-sm rounded-4">
+                <div class="d-flex align-items-center gap-1 text-warning mb-3">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+                <p class="text-muted small mb-4">"Gia đình mình vừa có chuyến đi Đà Lạt 4 ngày 3 đêm, homestay đẹp y hệt như trên ảnh, phòng ốc thơm tho sạch sẽ. Quét mã VietQR chuyển khoản cực nhanh!"</p>
+                <div class="d-flex align-items-center gap-3 mt-auto">
+                    <div class="rounded-circle bg-primary text-white fw-bold d-flex align-items-center justify-content-center" style="width:44px; height:44px;">
+                        TH
+                    </div>
+                    <div>
+                        <h6 class="fw-bold m-0">Trần Hoàng Long</h6>
+                        <small class="text-muted">Hà Nội • Đã ở Villa Đà Lạt</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 h-100 border-0 shadow-sm rounded-4">
+                <div class="d-flex align-items-center gap-1 text-warning mb-3">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+                <p class="text-muted small mb-4">"Giao diện web mới nhìn sang và mượt mà quá, tìm kiếm dễ dàng và có lọc theo khoảng giá rất rõ ràng. Đội ngũ CSKH hỗ trợ nhiệt tình lúc mình đổi giờ nhận phòng."</p>
+                <div class="d-flex align-items-center gap-3 mt-auto">
+                    <div class="rounded-circle bg-danger text-white fw-bold d-flex align-items-center justify-content-center" style="width:44px; height:44px;">
+                        MN
+                    </div>
+                    <div>
+                        <h6 class="fw-bold m-0">Mai Phương Nga</h6>
+                        <small class="text-muted">TP.HCM • Đã ở Căn hộ Vũng Tàu</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 h-100 border-0 shadow-sm rounded-4">
+                <div class="d-flex align-items-center gap-1 text-warning mb-3">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+                <p class="text-muted small mb-4">"Tôi vừa tham gia làm Cộng tác viên giới thiệu khách, hệ thống tính mã giới thiệu hoa hồng rất chuẩn chỉnh và minh bạch. Rất khuyến khích mọi người trải nghiệm!"</p>
+                <div class="d-flex align-items-center gap-3 mt-auto">
+                    <div class="rounded-circle bg-success text-white fw-bold d-flex align-items-center justify-content-center" style="width:44px; height:44px;">
+                        VD
+                    </div>
+                    <div>
+                        <h6 class="fw-bold m-0">Vũ Đức Thắng</h6>
+                        <small class="text-muted">Đà Nẵng • Đối tác Cộng tác viên</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action Banner (Host & Collaborator) -->
+<section class="container py-4 my-3">
+    <div class="p-5 rounded-4 position-relative overflow-hidden text-white" 
+         style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #ff385c 150%); box-shadow: var(--bhs-shadow-xl);">
+        <div class="row align-items-center position-relative" style="z-index: 2;">
+            <div class="col-lg-8">
+                <span class="badge bg-white text-dark mb-3 px-3 py-2 fw-bold"><i class="fa-solid fa-handshake me-1 text-danger"></i>Gia nhập mạng lưới đối tác</span>
+                <h2 class="text-white fw-bold display-6 mb-3">Bạn Có Chỗ Ở Muốn Cho Thuê Hoặc Muốn Kiếm Thêm Thu Nhập?</h2>
+                <p class="text-white-50 lead fs-6 mb-4 pe-lg-5">
+                    Đăng ký làm Chủ nhà để tiếp cận hàng triệu du khách, hoặc trở thành Cộng tác viên để nhận hoa hồng hấp dẫn trên mỗi lượt đặt phòng thành công.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a th:href="@{/dang-ky}" class="btn btn-primary btn-pill px-4 py-3">
+                        <i class="fa-solid fa-store me-2"></i>Đăng ký làm Chủ nhà
+                    </a>
+                    <a th:href="@{/dang-ky}" class="btn btn-outline-light btn-pill px-4 py-3">
+                        <i class="fa-solid fa-users me-2"></i>Trở thành CTV
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center mt-4 mt-lg-0">
+                <i class="fa-solid fa-house-laptop display-1 text-white-50 opacity-75"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+
+<script>
+    // Interactive Wishlist Toggle Button
+    function toggleWishlist(btn) {
+        btn.classList.toggle('active');
+        const icon = btn.querySelector('i');
+        if (btn.classList.contains('active')) {
+            icon.classList.remove('fa-regular');
+            icon.classList.add('fa-solid');
+        } else {
+            icon.classList.remove('fa-solid');
+            icon.classList.add('fa-regular');
+        }
+    }
+</script>
+</body>
+</html>

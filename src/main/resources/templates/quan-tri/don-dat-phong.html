@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Quản lý Booking')}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+<div class="container mt-4">
+    <h3>Toàn bộ Booking hệ thống</h3>
+    <table class="table bg-white">
+        <thead><tr><th>Mã đơn</th><th>Khách</th><th>Homestay</th><th>Tổng tiền</th><th>Trạng thái</th></tr></thead>
+        <tbody>
+        <tr th:each="b : ${bookings}">
+            <td th:text="${b.bookingCode}">BK001</td>
+            <td th:text="${b.customerName}">Khách</td>
+            <td th:text="${b.details[0].room.homestay.name}">Homestay</td>
+            <td th:text="${#numbers.formatDecimal(b.finalAmount,0,'POINT',0,'COMMA')} + ' VNĐ'">Giá</td>
+            <td><span class="badge" th:classappend="'badge-status-' + ${b.status}" th:text="${b.status}"></span></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+</body>
+</html>

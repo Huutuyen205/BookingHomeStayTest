@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Tổng quan quản trị')}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div>
+            <h3 class="fw-bold m-0"><i class="fa-solid fa-chart-line text-danger me-2"></i>Tổng Quan Hệ Thống Quản Trị</h3>
+            <p class="text-muted small m-0">Số liệu thời gian thực và biểu đồ phân tích hoạt động BookingHomeStay</p>
+        </div>
+        <span class="badge bg-primary-subtle text-primary px-3 py-2 fw-semibold">
+            <i class="fa-solid fa-shield-halved me-1"></i>Quyền Quản Trị Viên
+        </span>
+    </div>
+
+    <!-- 4 Stats Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-3 col-6">
+            <div class="card p-4 border-0 shadow-sm rounded-4 hover-lift" style="background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-uppercase small fw-bold text-muted">Người dùng</span>
+                        <h2 class="display-6 fw-bold text-dark my-2" th:text="${stats.totalUsers}">0</h2>
+                        <span class="small text-primary fw-semibold"><i class="fa-solid fa-users me-1"></i>Tài khoản</span>
+                    </div>
+                    <div class="p-3 bg-white rounded-circle shadow-sm text-primary fs-4">
+                        <i class="fa-solid fa-user-group"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="card p-4 border-0 shadow-sm rounded-4 hover-lift" style="background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-uppercase small fw-bold text-muted">Chủ nhà</span>
+                        <h2 class="display-6 fw-bold text-dark my-2" th:text="${stats.totalHosts}">0</h2>
+                        <span class="small text-success fw-semibold"><i class="fa-solid fa-user-check me-1"></i>Đối tác</span>
+                    </div>
+                    <div class="p-3 bg-white rounded-circle shadow-sm text-success fs-4">
+                        <i class="fa-solid fa-house-user"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="card p-4 border-0 shadow-sm rounded-4 hover-lift" style="background: linear-gradient(135deg, #ffffff 0%, #fefce8 100%);">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-uppercase small fw-bold text-muted">Homestay</span>
+                        <h2 class="display-6 fw-bold text-dark my-2" th:text="${stats.totalHomestays}">0</h2>
+                        <span class="small text-warning fw-semibold"><i class="fa-solid fa-hotel me-1"></i>Chỗ ở</span>
+                    </div>
+                    <div class="p-3 bg-white rounded-circle shadow-sm text-warning fs-4">
+                        <i class="fa-solid fa-house-chimney"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="card p-4 border-0 shadow-sm rounded-4 hover-lift" style="background: linear-gradient(135deg, #ffffff 0%, #fff1f2 100%);">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-uppercase small fw-bold text-muted">Đơn chờ xử lý</span>
+                        <h2 class="display-6 fw-bold text-danger my-2" th:text="${stats.pendingBookings}">0</h2>
+                        <span class="small text-danger fw-semibold"><i class="fa-solid fa-bell me-1"></i>Cần duyệt</span>
+                    </div>
+                    <div class="p-3 bg-white rounded-circle shadow-sm text-danger fs-4">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+            <div class="card p-4 border-0 shadow-sm rounded-4 h-100">
+                <h5 class="fw-bold mb-3"><i class="fa-solid fa-chart-pie text-danger me-2"></i>Nguồn gốc đơn đặt phòng</h5>
+                <canvas id="bieuDoNguon" height="230"></canvas>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card p-4 border-0 shadow-sm rounded-4 h-100">
+                <h5 class="fw-bold mb-3"><i class="fa-solid fa-chart-column text-primary me-2"></i>Số lượng đơn đặt theo tháng</h5>
+                <canvas id="bieuDoThang" height="230"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Admin Action Buttons -->
+    <h5 class="fw-bold mb-3"><i class="fa-solid fa-bolt text-warning me-2"></i>Phím tắt quản lý</h5>
+    <div class="row g-3">
+        <div class="col-lg-3 col-md-4 col-6">
+            <a th:href="@{/quan-tri/nguoi-dung}" class="card p-3 border-0 shadow-sm rounded-4 text-decoration-none text-dark hover-lift text-center">
+                <i class="fa-solid fa-users-gear fs-3 text-info mb-2"></i>
+                <div class="fw-bold small">Quản lý người dùng</div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-6">
+            <a th:href="@{/quan-tri/chu-nha}" class="card p-3 border-0 shadow-sm rounded-4 text-decoration-none text-dark hover-lift text-center">
+                <i class="fa-solid fa-user-check fs-3 text-success mb-2"></i>
+                <div class="fw-bold small">Duyệt chủ nhà</div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-6">
+            <a th:href="@{/quan-tri/cong-tac-vien}" class="card p-3 border-0 shadow-sm rounded-4 text-decoration-none text-dark hover-lift text-center">
+                <i class="fa-solid fa-handshake fs-3 text-warning mb-2"></i>
+                <div class="fw-bold small">Duyệt cộng tác viên</div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-6">
+            <a th:href="@{/quan-tri/homestay}" class="card p-3 border-0 shadow-sm rounded-4 text-decoration-none text-dark hover-lift text-center">
+                <i class="fa-solid fa-hotel fs-3 text-danger mb-2"></i>
+                <div class="fw-bold small">Duyệt Homestay</div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-6">
+            <a th:href="@{/quan-tri/phong}" class="card p-3 border-0 shadow-sm rounded-4 text-decoration-none text-dark hover-lift text-center">
+                <i class="fa-solid fa-bed fs-3 text-primary mb-2"></i>
+                <div class="fw-bold small">Quản lý phòng</div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-6">
+            <a th:href="@{/quan-tri/ma-giam-gia}" class="card p-3 border-0 shadow-sm rounded-4 text-decoration-none text-dark hover-lift text-center">
+                <i class="fa-solid fa-ticket fs-3 text-success mb-2"></i>
+                <div class="fw-bold small">Mã giảm giá</div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-4 col-6">
+            <a th:href="@{/quan-tri/don-dat-phong}" class="card p-3 border-0 shadow-sm rounded-4 text-decoration-none text-dark hover-lift text-center">
+                <i class="fa-solid fa-receipt fs-3 text-danger mb-2"></i>
+                <div class="fw-bold small">Đơn đặt phòng</div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script th:inline="javascript">
+    const nhanNguon = /*[[${bookingsBySource.keySet()}]]*/ [];
+    const soLuongNguon = /*[[${bookingsBySource.values()}]]*/ [];
+
+    new Chart(document.getElementById('bieuDoNguon'), {
+        type: 'doughnut',
+        data: {
+            labels: nhanNguon,
+            datasets: [{
+                data: soLuongNguon,
+                backgroundColor: ['#0f172a', '#ff385c'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true, position: 'bottom' },
+                tooltip: {
+                    callbacks: {
+                        label: function (ctx) {
+                            const tong = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                            const phanTram = tong > 0 ? Math.round(ctx.raw / tong * 100) : 0;
+                            return ctx.label + ': ' + ctx.raw + ' đơn (' + phanTram + '%)';
+                        }
+                    }
+                }
+            },
+            cutout: '65%'
+        }
+    });
+
+    const nhanThang = /*[[${bookingsByMonth.keySet()}]]*/ [];
+    const soLuongThang = /*[[${bookingsByMonth.values()}]]*/ [];
+
+    new Chart(document.getElementById('bieuDoThang'), {
+        type: 'bar',
+        data: {
+            labels: nhanThang,
+            datasets: [{ 
+                label: 'Số đơn đặt phòng', 
+                data: soLuongThang, 
+                backgroundColor: '#ff385c',
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { 
+                y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: '#f1f5f9' } },
+                x: { grid: { display: false } }
+            }
+        }
+    });
+</script>
+</body>
+</html>

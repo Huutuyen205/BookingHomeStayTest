@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Homestay')}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+<div class="container mt-4" style="max-width:600px;">
+    <h3>Thông tin Homestay</h3>
+    <form th:action="@{/chu-nha/homestay/luu}" th:object="${homestayForm}" method="post">
+        <input type="hidden" th:field="*{id}">
+        <div class="mb-2"><label>Tên</label><input class="form-control" th:field="*{name}" required></div>
+        <div class="mb-2"><label>Mô tả</label><textarea class="form-control" th:field="*{description}"></textarea></div>
+        <div class="row">
+            <div class="col-6 mb-2">
+                <label>Tỉnh/thành</label>
+                <select class="form-select" th:field="*{province}" required>
+                    <th:block th:replace="~{dung-chung/danh-sach-tinh :: options(selected=${homestayForm.province})}"></th:block>
+                </select>
+            </div>
+            <div class="col-6 mb-2"><label>Quận/huyện</label><input class="form-control" th:field="*{district}"></div>
+        </div>
+        <div class="mb-2"><label>Địa chỉ</label><input class="form-control" th:field="*{address}" required></div>
+        <div class="row">
+            <div class="col-6 mb-2"><label>Latitude</label><input type="number" step="any" class="form-control" th:field="*{latitude}"></div>
+            <div class="col-6 mb-2"><label>Longitude</label><input type="number" step="any" class="form-control" th:field="*{longitude}"></div>
+        </div>
+        <button class="btn btn-tv w-100" type="submit">Lưu (sẽ gửi Admin duyệt)</button>
+    </form>
+</div>
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Homestay gần bạn')}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+
+<div class="container py-5" style="max-width: 680px;">
+    <!-- Scanner Card -->
+    <div class="card p-5 text-center border-0 shadow-sm rounded-4 mb-4">
+        <div class="d-inline-flex align-items-center justify-content-center bg-danger-subtle text-danger rounded-circle mb-3 mx-auto"
+             style="width: 72px; height: 72px; animation: pulseGlow 2s infinite;">
+            <i class="fa-solid fa-location-crosshairs display-6"></i>
+        </div>
+        <h3 class="fw-bold mb-2">Tìm Homestay Gần Vị Trí Của Bạn</h3>
+        <p class="text-muted small mb-4">
+            Bật định vị GPS trên trình duyệt để chúng tôi tìm kiếm những chỗ nghỉ tuyệt vời nhất ở ngay quanh bạn.
+        </p>
+
+        <button id="btnLocate" class="btn btn-primary btn-pill py-3 fw-bold shadow-sm" onclick="locateAndSearch()">
+            <i class="fa-solid fa-compass me-2"></i> Bắt đầu quét vị trí
+        </button>
+        <small class="text-muted mt-2 d-block">Dữ liệu vị trí chỉ được sử dụng cho phiên tìm kiếm này</small>
+    </div>
+
+    <!-- Results Box -->
+    <div id="resultsWrap">
+        <div id="results" class="d-flex flex-column gap-3"></div>
+        <div id="emptyMsg" class="card p-4 text-center border-0 shadow-sm rounded-4 d-none">
+            <i class="fa-solid fa-map-location-dot display-6 text-muted mb-2"></i>
+            <h6 class="fw-bold m-0">Chưa tìm thấy homestay nào trong phạm vi gần bạn</h6>
+            <small class="text-muted">Bạn có thể tìm kiếm theo Tỉnh / Thành phố trên trang chủ.</small>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+
+<script>
+    function locateAndSearch() {
+        if (!navigator.geolocation) {
+            alert('Trình duyệt của bạn không hỗ trợ định vị GPS.');
+            return;
+        }
+        const btn = document.getElementById('btnLocate');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin me-2"></i> Đang xác định tọa độ GPS...';
+
+        navigator.geolocation.getCurrentPosition(function (pos) {
+            btn.innerHTML = '<i class="fa-solid fa-radar me-2"></i> Đang tìm kiếm chỗ ở lân cận...';
+            fetchNearby(pos.coords.latitude, pos.coords.longitude);
+        }, function () {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation me-2"></i> Thử lại (Vui lòng cấp quyền truy cập)';
+            alert('Vui lòng cho phép trình duyệt truy cập vị trí của bạn để sử dụng tính năng này.');
+        });
+    }
+
+    function fetchNearby(lat, lng) {
+        fetch(`/homestay/api/gan-day?lat=${lat}&lng=${lng}`)
+            .then(res => res.json())
+            .then(renderResults)
+            .catch(() => {
+                alert('Có lỗi xảy ra khi kết nối máy chủ. Vui lòng thử lại sau.');
+                const btn = document.getElementById('btnLocate');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-compass me-2"></i> Bắt đầu quét vị trí';
+            });
+    }
+
+    function renderResults(list) {
+        const container = document.getElementById('results');
+        const emptyMsg = document.getElementById('emptyMsg');
+        const btn = document.getElementById('btnLocate');
+        
+        container.innerHTML = '';
+        if (!list || list.length === 0) {
+            emptyMsg.classList.remove('d-none');
+        } else {
+            emptyMsg.classList.add('d-none');
+            list.forEach(h => {
+                container.insertAdjacentHTML('beforeend', `
+                    <div class="card p-3 border-0 shadow-sm rounded-4 hover-lift">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="p-3 bg-light rounded-3 text-danger fs-4">
+                                    <i class="fa-solid fa-house-chimney"></i>
+                                </div>
+                                <div>
+                                    <h5 class="fw-bold text-dark m-0 mb-1">${h.name}</h5>
+                                    <div class="small text-muted"><i class="fa-solid fa-location-dot text-danger me-1"></i>${h.province}</div>
+                                </div>
+                            </div>
+                            <a href="/homestay/${h.slug}" class="btn btn-primary btn-pill btn-sm px-3">
+                                Chi tiết <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>`);
+            });
+        }
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-rotate-right me-2"></i> Quét lại vị trí hiện tại';
+    }
+</script>
+</body>
+</html>

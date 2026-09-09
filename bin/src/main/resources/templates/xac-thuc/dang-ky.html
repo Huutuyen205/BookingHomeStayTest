@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Đăng ký thành viên')}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+
+<div class="auth-wrapper">
+    <div class="auth-card-modern" style="max-width: 980px;">
+        <div class="row g-0">
+            <!-- Side Image -->
+            <div class="col-lg-5 d-none d-lg-block auth-side-image">
+                <div class="mb-4">
+                    <span class="badge bg-white text-dark px-3 py-2 fw-bold mb-3"><i class="fa-solid fa-gift text-danger me-1"></i>Đặc quyền thành viên</span>
+                    <h3 class="fw-bold text-white mb-2">Bắt đầu chuyến hành trình của bạn</h3>
+                    <p class="small text-white-50">Tạo tài khoản miễn phí để nhận thông báo giảm giá phòng, quản lý đơn đặt dễ dàng và tham gia kiếm thêm thu nhập cùng BookingHomeStay.</p>
+                </div>
+                <div class="d-flex flex-column gap-2 small text-white-50">
+                    <div><i class="fa-solid fa-circle-check text-success me-2"></i>Đặt phòng nhanh chóng chỉ với 1 chạm</div>
+                    <div><i class="fa-solid fa-circle-check text-success me-2"></i>Tích lũy điểm thưởng và mã giảm giá</div>
+                    <div><i class="fa-solid fa-circle-check text-success me-2"></i>Cơ hội nhận hoa hồng khi làm Cộng tác viên</div>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div class="col-lg-7">
+                <div class="auth-form-wrap">
+                    <div class="mb-4">
+                        <h3 class="fw-bold mb-1">Đăng ký tài khoản</h3>
+                        <p class="text-muted small">Điền các thông tin dưới đây để đăng ký thành viên</p>
+                    </div>
+
+                    <div class="alert alert-danger py-2 small" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+                    <form th:action="@{/dang-ky}" th:object="${registerRequest}" method="post" id="formDangKy">
+                        <div class="row g-2 mb-3">
+                            <div class="col-sm-6">
+                                <label class="form-label small fw-bold text-muted">Họ và tên</label>
+                                <div class="input-icon-group">
+                                    <i class="fa-regular fa-user input-icon"></i>
+                                    <input class="form-control" th:field="*{fullName}" placeholder="Nguyễn Văn A" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label small fw-bold text-muted">Số điện thoại</label>
+                                <div class="input-icon-group">
+                                    <i class="fa-solid fa-phone input-icon"></i>
+                                    <input class="form-control" id="ipPhone" th:field="*{phone}" placeholder="0987654321">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-2 mb-3">
+                            <div class="col-sm-6">
+                                <label class="form-label small fw-bold text-muted">Địa chỉ Email</label>
+                                <div class="input-icon-group">
+                                    <i class="fa-regular fa-envelope input-icon"></i>
+                                    <input type="email" class="form-control" id="ipEmail" th:field="*{email}" placeholder="email@domain.com" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="form-label small fw-bold text-muted">Mật khẩu</label>
+                                <div class="input-icon-group">
+                                    <i class="fa-solid fa-lock input-icon"></i>
+                                    <input type="password" class="form-control" th:field="*{password}" placeholder="Tối thiểu 6 ký tự" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- OTP Verification Box -->
+                        <div class="border rounded-4 p-3 mb-3 bg-light">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="fw-bold small text-dark m-0"><i class="fa-solid fa-shield-halved text-danger me-1"></i>Xác thực OTP</label>
+                                <small class="text-muted">Chọn kênh nhận mã</small>
+                            </div>
+                            <div class="d-flex gap-3 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="kenhOtpRadio" value="EMAIL" id="kenhEmail" checked>
+                                    <label class="form-check-label small fw-semibold" for="kenhEmail"><i class="fa-regular fa-envelope text-primary me-1"></i>Email</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="kenhOtpRadio" value="SMS" id="kenhSms">
+                                    <label class="form-check-label small fw-semibold" for="kenhSms"><i class="fa-solid fa-comment-sms text-success me-1"></i>SMS</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="kenhOtpRadio" value="ZALO" id="kenhZalo">
+                                    <label class="form-check-label small fw-semibold" for="kenhZalo"><i class="fa-solid fa-comment-dots text-info me-1"></i>Zalo</label>
+                                </div>
+                            </div>
+                            <input type="hidden" th:field="*{otpChannel}" id="ipOtpChannel" value="EMAIL">
+                            <div class="input-group">
+                                <input class="form-control" th:field="*{otpCode}" placeholder="Nhập mã 6 số">
+                                <button class="btn btn-outline-dark" type="button" id="btnGuiOtp">
+                                    <i class="fa-regular fa-paper-plane me-1"></i> Gửi mã
+                                </button>
+                            </div>
+                            <div class="small fw-semibold mt-1" id="otpStatus"></div>
+                        </div>
+
+                        <!-- Partner Checkboxes -->
+                        <div class="p-3 border rounded-3 bg-white mb-3">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" th:field="*{registerAsHost}" id="ckHost">
+                                <label class="form-check-label small fw-semibold" for="ckHost">
+                                    Đăng ký làm <strong>Chủ nhà cho thuê</strong> (cần Admin duyệt)
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" th:field="*{registerAsCollaborator}" id="ckCtv">
+                                <label class="form-check-label small fw-semibold" for="ckCtv">
+                                    Đăng ký làm <strong>Cộng tác viên / Sale</strong> (hưởng hoa hồng giới thiệu)
+                                </label>
+                            </div>
+                            <!-- CTV Bank Fields -->
+                            <div id="ctvFields" class="pt-3 border-top mt-2" style="display:none;">
+                                <div class="row g-2">
+                                    <div class="col-sm-6">
+                                        <label class="small fw-semibold text-muted">Ngân hàng thụ hưởng</label>
+                                        <input class="form-control form-control-sm" th:field="*{bankName}" placeholder="VD: Vietcombank, MB Bank">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="small fw-semibold text-muted">Số tài khoản nhận hoa hồng</label>
+                                        <input class="form-control form-control-sm" th:field="*{bankAccountNumber}" placeholder="Số tài khoản ngân hàng">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary btn-pill w-100 py-2 fw-bold" type="submit">
+                            <i class="fa-solid fa-user-check me-1"></i> Hoàn tất đăng ký
+                        </button>
+                    </form>
+
+                    <div class="text-center pt-3 border-top mt-3">
+                        <span class="small text-muted">Đã có tài khoản?</span>
+                        <a th:href="@{/dang-nhap}" class="small fw-bold text-danger ms-1 text-decoration-none">Đăng nhập ngay</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+<script th:inline="javascript">
+    document.getElementById('ckCtv').addEventListener('change', function () {
+        document.getElementById('ctvFields').style.display = this.checked ? 'block' : 'none';
+    });
+
+    document.querySelectorAll('input[name=kenhOtpRadio]').forEach(function (radio) {
+        radio.addEventListener('change', function () {
+            document.getElementById('ipOtpChannel').value = this.value;
+        });
+    });
+
+    document.getElementById('btnGuiOtp').addEventListener('click', function () {
+        const kenh = document.getElementById('ipOtpChannel').value;
+        const dest = kenh === 'EMAIL' ? document.getElementById('ipEmail').value : document.getElementById('ipPhone').value;
+        const statusEl = document.getElementById('otpStatus');
+        const btn = this;
+
+        if (!dest) {
+            alert('Vui lòng nhập ' + (kenh === 'EMAIL' ? 'email' : 'số điện thoại') + ' trước khi gửi mã.');
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang gửi...';
+        statusEl.className = 'small text-muted mt-1';
+        statusEl.textContent = 'Đang xử lý gửi mã OTP...';
+
+        const params = new URLSearchParams({dest: dest, kenh: kenh});
+        fetch('/dang-ky/gui-otp?' + params.toString(), {method: 'POST'})
+            .then(r => r.json())
+            .then(data => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-regular fa-paper-plane me-1"></i> Gửi lại mã';
+                // Đọc đúng field "success" từ server (trước đây luôn hiện màu xanh
+                // dù gửi thất bại, vì chỉ kiểm tra request có trả JSON hay không).
+                if (data.success) {
+                    statusEl.className = 'small text-success fw-bold mt-1';
+                    statusEl.textContent = data.message || 'Mã OTP đã được gửi thành công!';
+                } else {
+                    statusEl.className = 'small text-warning fw-bold mt-1';
+                    statusEl.textContent = data.message || 'Chưa gửi được mã, vui lòng thử kênh khác.';
+                }
+            })
+            .catch(() => {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-regular fa-paper-plane me-1"></i> Thử lại';
+                statusEl.className = 'small text-danger fw-bold mt-1';
+                statusEl.textContent = 'Gửi mã thất bại, vui lòng thử lại sau.';
+            });
+    });
+</script>
+</body>
+</html>

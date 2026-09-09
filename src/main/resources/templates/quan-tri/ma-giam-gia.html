@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Mã giảm giá')}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="mb-0"><i class="fa-solid fa-tags me-2"></i>Mã giảm giá</h3>
+        <a th:href="@{/quan-tri/ma-giam-gia/them-moi}" class="btn btn-tv">+ Tạo mã mới</a>
+    </div>
+    <p class="text-danger" th:if="${errorMessage}" th:text="${errorMessage}"></p>
+    <table class="table bg-white align-middle">
+        <thead><tr><th>Mã</th><th>Loại</th><th>Giá trị</th><th>Hiệu lực</th><th>Đã dùng</th><th>Trạng thái</th><th>Hành động</th></tr></thead>
+        <tbody>
+        <tr th:each="p : ${promotions}">
+            <td><b th:text="${p.code}">MA123</b></td>
+            <td th:text="${p.discountType.name() == 'PERCENTAGE'} ? 'Phần trăm' : 'Số tiền cố định'">Loại</td>
+            <td th:text="${p.discountType.name() == 'PERCENTAGE'} ? (${p.discountValue} + '%') : (${#numbers.formatDecimal(p.discountValue,0,'POINT',0,'COMMA')} + ' VNĐ')">Giá trị</td>
+            <td th:text="${p.startDate} + ' → ' + ${p.endDate}">Hiệu lực</td>
+            <td th:text="${p.usedCount} + (${p.usageLimit} > 0 ? ('/' + ${p.usageLimit}) : ' (không giới hạn)')">0</td>
+            <td><span class="badge" th:classappend="${p.status == 'ACTIVE'} ? 'bg-success' : 'bg-secondary'" th:text="${p.status}">ACTIVE</span></td>
+            <td class="d-flex gap-1">
+                <a th:href="@{/quan-tri/ma-giam-gia/{id}/sua(id=${p.id})}" class="btn btn-sm btn-outline-primary">Sửa</a>
+                <form th:action="@{/quan-tri/ma-giam-gia/{id}/doi-trang-thai(id=${p.id})}" method="post">
+                    <button class="btn btn-sm btn-outline-secondary" th:text="${p.status == 'ACTIVE'} ? 'Khoá' : 'Mở lại'">Khoá</button>
+                </form>
+                <form th:action="@{/quan-tri/ma-giam-gia/{id}/xoa(id=${p.id})}" method="post" onsubmit="return confirm('Xoá vĩnh viễn mã này?')">
+                    <button class="btn btn-sm btn-outline-danger">Xoá</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${promotions.isEmpty()}"><td colspan="7" class="text-center text-muted py-3">Chưa có mã giảm giá nào.</td></tr>
+        </tbody>
+    </table>
+</div>
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+</body>
+</html>

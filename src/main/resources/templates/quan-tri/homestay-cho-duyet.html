@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Quản lý Homestay')}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+<div class="container mt-4">
+    <h3>Tất cả Homestay</h3>
+    <table class="table bg-white">
+        <thead><tr><th>Tên</th><th>Host</th><th>Tỉnh/thành</th><th>Trạng thái</th><th>Hành động</th></tr></thead>
+        <tbody>
+        <tr th:each="h : ${homestays}">
+            <td th:text="${h.name}">Tên</td>
+            <td th:text="${h.host.businessName}">Host</td>
+            <td th:text="${h.province}">Tỉnh</td>
+            <td><span class="badge" th:classappend="'badge-status-' + ${h.status}" th:text="${h.status}"></span></td>
+            <td>
+                <form th:if="${h.status.name() == 'PENDING'}" th:action="@{/quan-tri/homestay/{id}/duyet(id=${h.id})}" method="post" class="d-inline">
+                    <button class="btn btn-sm btn-success">Duyệt</button>
+                </form>
+                <form th:if="${h.status.name() == 'PENDING'}" th:action="@{/quan-tri/homestay/{id}/tu-choi(id=${h.id})}" method="post" class="d-inline">
+                    <button class="btn btn-sm btn-danger">Từ chối</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+</body>
+</html>

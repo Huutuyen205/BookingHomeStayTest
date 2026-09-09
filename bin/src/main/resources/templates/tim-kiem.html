@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Khám phá & Tìm kiếm chỗ ở')}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+
+<div class="container py-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb small">
+            <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none">Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Tìm kiếm homestay</li>
+            <li th:if="${province != null and !province.isEmpty()}" class="breadcrumb-item active" th:text="${province}">Đà Lạt</li>
+        </ol>
+    </nav>
+
+    <div class="row g-4">
+        <!-- Sidebar: Bộ lọc tìm kiếm (Filter Card) -->
+        <div class="col-lg-3 col-md-4">
+            <div class="card p-4 border-0 shadow-sm rounded-4 sticky-top" style="top: 85px;">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold m-0"><i class="fa-solid fa-sliders text-danger me-2"></i>Bộ lọc</h5>
+                    <a th:href="@{/tim-kiem}" class="text-danger small fw-semibold text-decoration-none">Đặt lại</a>
+                </div>
+
+                <form method="get" th:action="@{/tim-kiem}" id="formLocBoLoc">
+                    <!-- Tỉnh / Thành phố đang xem -->
+                    <div th:if="${province != null and !province.isEmpty()}" class="mb-3">
+                        <label class="form-label small fw-bold text-muted">Khu vực đã chọn</label>
+                        <div class="d-flex justify-content-between align-items-center p-2 px-3 rounded-3 bg-light border">
+                            <span class="fw-bold text-dark" th:text="${province}">Đà Lạt</span>
+                            <a th:href="@{/tim-kiem}" class="text-danger small" title="Chọn tỉnh khác"><i class="fa-solid fa-xmark"></i></a>
+                        </div>
+                        <input type="hidden" name="province" th:value="${province}">
+                    </div>
+
+                    <!-- Dropdown chọn Tỉnh/thành nếu chưa chọn -->
+                    <div th:if="${province == null or province.isEmpty()}" class="mb-3">
+                        <label class="form-label small fw-bold text-muted"><i class="fa-solid fa-map-location-dot me-1"></i>Tỉnh / Thành phố</label>
+                        <select class="form-select" name="province" id="chonTinh" onchange="document.getElementById('formLocBoLoc').submit();">
+                            <th:block th:replace="~{dung-chung/danh-sach-tinh :: options(selected=${province})}"></th:block>
+                        </select>
+                    </div>
+
+                    <!-- Quận / Huyện (nếu đã có Tỉnh) -->
+                    <div class="mb-3" th:if="${province != null and !province.isEmpty()}">
+                        <label class="form-label small fw-bold text-muted"><i class="fa-solid fa-tree-city me-1"></i>Quận / Huyện</label>
+                        <select class="form-select" name="district">
+                            <option value="">-- Tất cả quận/huyện --</option>
+                            <option th:each="q : ${districtsOfProvince}" th:value="${q}" th:text="${q}"
+                                    th:selected="${q == district}"></option>
+                        </select>
+                    </div>
+
+                    <!-- Số khách tối thiểu -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-muted"><i class="fa-solid fa-user-group me-1"></i>Số khách tối thiểu</label>
+                        <input type="number" min="1" class="form-control" name="guests" placeholder="VD: 2 khách" th:value="${guests}">
+                    </div>
+
+                    <!-- Giá tối đa / đêm -->
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-muted"><i class="fa-solid fa-money-bill-wave me-1"></i>Giá tối đa / đêm (VNĐ)</label>
+                        <input type="number" min="0" step="50000" class="form-control" name="maxPrice" placeholder="VD: 1,500,000" th:value="${maxPrice}">
+                    </div>
+
+                    <button class="btn btn-primary w-100 btn-pill py-2" type="submit">
+                        <i class="fa-solid fa-filter me-1"></i> Áp dụng bộ lọc
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main Content: Kết quả tìm kiếm -->
+        <div class="col-lg-9 col-md-8">
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                <div>
+                    <h4 class="fw-bold m-0" th:text="'Tìm thấy ' + ${results.size()} + ' chỗ ở phù hợp'">Tìm thấy 12 chỗ ở</h4>
+                    <small class="text-muted" th:if="${province != null and !province.isEmpty()}" th:text="'Tại khu vực: ' + ${province}">Tại khu vực Đà Lạt</small>
+                </div>
+            </div>
+
+            <!-- Results Grid -->
+            <div class="row g-4" th:if="${!results.isEmpty()}">
+                <div class="col-lg-4 col-md-6 col-12" th:each="h : ${results}">
+                    <div class="card-homestay-modern">
+                        <div class="card-image-wrap">
+                            <span class="card-badge-province" th:text="${h.province}">Đà Lạt</span>
+                            <a th:href="@{/homestay/{slug}(slug=${h.slug})}">
+                                <img th:if="${!h.images.isEmpty()}" th:src="${h.images[0].imageUrl}" th:alt="${h.name}">
+                                <img th:unless="${!h.images.isEmpty()}" th:src="@{/images/gallery3.png}" th:alt="${h.name}">
+                            </a>
+                        </div>
+                        <div class="card-body-content">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="card-rating-badge"><i class="fa-solid fa-star"></i> 4.9</span>
+                                <span class="small text-muted" th:text="${h.district}">Phường 1</span>
+                            </div>
+                            <a th:href="@{/homestay/{slug}(slug=${h.slug})}" class="text-decoration-none">
+                                <h4 class="card-homestay-title text-truncate" th:text="${h.name}">Tên Homestay</h4>
+                            </a>
+                            <div class="card-homestay-address text-truncate">
+                                <i class="fa-solid fa-location-dot text-danger"></i>
+                                <span th:text="${h.district} + ', ' + ${h.province}">Đà Lạt, Lâm Đồng</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-auto pt-3 border-top">
+                                <div class="card-price-block">
+                                    <span class="card-price-amount">Chi tiết</span>
+                                </div>
+                                <a th:href="@{/homestay/{slug}(slug=${h.slug})}" class="btn btn-outline-custom btn-sm btn-pill px-3">
+                                    Xem phòng <i class="fa-solid fa-angle-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State if no homestay found -->
+            <div th:if="${results.isEmpty()}" class="p-5 text-center bg-white rounded-4 border">
+                <div class="mb-3 text-muted display-4">
+                    <i class="fa-solid fa-magnifying-glass-location"></i>
+                </div>
+                <h5 class="fw-bold">Không tìm thấy homestay phù hợp với bộ lọc</h5>
+                <p class="text-muted small mb-4">Hãy thử điều chỉnh lại mức giá, số khách hoặc chọn một khu vực khác gần đó.</p>
+                <a th:href="@{/tim-kiem}" class="btn btn-primary btn-pill px-4">
+                    <i class="fa-solid fa-rotate-left me-1"></i> Xóa tất cả bộ lọc
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+</body>
+</html>

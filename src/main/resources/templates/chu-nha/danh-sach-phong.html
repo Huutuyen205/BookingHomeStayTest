@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head('Phòng của ' + ${homestay.name})}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between">
+        <h3 th:text="'Phòng của ' + ${homestay.name}">Phòng</h3>
+        <a th:href="@{/chu-nha/homestay/{id}/phong/them-moi(id=${homestay.id})}" class="btn btn-tv">+ Thêm phòng</a>
+    </div>
+    <table class="table bg-white mt-2">
+        <thead><tr><th>Tên</th><th>Giá/đêm</th><th>SL khách tối đa</th><th>Trạng thái</th><th>Hành động</th></tr></thead>
+        <tbody>
+        <tr th:each="r : ${rooms}">
+            <td th:text="${r.name}">Deluxe</td>
+            <td th:text="${#numbers.formatDecimal(r.pricePerNight,0,'POINT',0,'COMMA')} + ' VNĐ'">Giá</td>
+            <td th:text="${r.maxGuests}">2</td>
+            <td>
+                <span class="badge" th:classappend="${r.status.name() == 'ACTIVE'} ? 'bg-success' : 'bg-secondary'"
+                      th:text="${r.status.name() == 'ACTIVE'} ? 'Còn phòng' : 'Hết phòng'"></span>
+            </td>
+            <td class="d-flex gap-1">
+                <a th:href="@{/chu-nha/homestay/{hid}/phong/{rid}/sua(hid=${homestay.id},rid=${r.id})}"
+                   class="btn btn-sm btn-outline-primary">Sửa giá</a>
+                <form th:action="@{/chu-nha/homestay/{hid}/phong/{rid}/doi-trang-thai(hid=${homestay.id},rid=${r.id})}" method="post">
+                    <button class="btn btn-sm btn-outline-secondary"
+                            th:text="${r.status.name() == 'ACTIVE'} ? 'Báo hết phòng' : 'Báo còn phòng'"></button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+</body>
+</html>

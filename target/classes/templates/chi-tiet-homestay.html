@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{dung-chung/layout :: head(${homestay.name})}"></head>
+<body>
+<nav th:replace="~{dung-chung/layout :: navbar}"></nav>
+
+<div class="container py-4">
+    <!-- Breadcrumbs & Action Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item"><a th:href="@{/}" class="text-decoration-none">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/tim-kiem}" class="text-decoration-none">Khám phá</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/tim-kiem(province=${homestay.province})}" class="text-decoration-none" th:text="${homestay.province}">Tỉnh/Thành</a></li>
+                <li class="breadcrumb-item active text-truncate" style="max-width: 250px;" th:text="${homestay.name}">Tên Homestay</li>
+            </ol>
+        </nav>
+        <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-outline-custom rounded-pill" onclick="navigator.clipboard.writeText(window.location.href); alert('Đã sao chép liên kết chia sẻ!');">
+                <i class="fa-solid fa-arrow-up-from-bracket me-1"></i> Chia sẻ
+            </button>
+            <button class="btn btn-sm btn-outline-custom rounded-pill" onclick="this.classList.toggle('text-danger');">
+                <i class="fa-regular fa-heart me-1"></i> Lưu lại
+            </button>
+        </div>
+    </div>
+
+    <!-- Title & Basic Info -->
+    <div class="mb-3">
+        <h1 class="fw-bold mb-2 display-6" th:text="${homestay.name}">Tên homestay cao cấp</h1>
+        <div class="d-flex flex-wrap align-items-center gap-3 text-muted small">
+            <span class="text-warning fw-bold"><i class="fa-solid fa-star"></i> 4.9 <span class="text-muted fw-normal">(42 đánh giá)</span></span>
+            <span>•</span>
+            <span>
+                <i class="fa-solid fa-location-dot text-danger me-1"></i>
+                <span th:text="${homestay.address} + ', ' + ${homestay.district} + ', ' + ${homestay.province}">123 Đường Du Lịch, Phường 1</span>
+            </span>
+            <span th:if="${homestay.latitude != null}">•</span>
+            <a th:if="${homestay.latitude != null}"
+               th:href="@{https://www.google.com/maps(q=${homestay.latitude} + ',' + ${homestay.longitude})}"
+               target="_blank" class="text-primary fw-semibold text-decoration-none">
+                <i class="fa-solid fa-map-location-dot me-1"></i> Xem trên Google Maps
+            </a>
+        </div>
+    </div>
+
+    <!-- Photo Mosaic Grid (Airbnb Style 5 Photos) -->
+    <div class="photo-mosaic-grid">
+        <div class="mosaic-item-main">
+            <img th:if="${!homestay.images.isEmpty()}" th:src="${homestay.images[0].imageUrl}" th:alt="${homestay.name}">
+            <img th:unless="${!homestay.images.isEmpty()}" th:src="@{/images/gallery1-1.jpg}" th:alt="${homestay.name}">
+        </div>
+        <div class="mosaic-item">
+            <img th:if="${homestay.images.size() > 1}" th:src="${homestay.images[1].imageUrl}" alt="Ảnh homestay">
+            <img th:unless="${homestay.images.size() > 1}" th:src="@{/images/gallery2-2.jpg}" alt="Ảnh homestay">
+        </div>
+        <div class="mosaic-item">
+            <img th:if="${homestay.images.size() > 2}" th:src="${homestay.images[2].imageUrl}" alt="Ảnh homestay">
+            <img th:unless="${homestay.images.size() > 2}" th:src="@{/images/gallery3-3.jpg}" alt="Ảnh homestay">
+        </div>
+        <div class="mosaic-item">
+            <img th:if="${homestay.images.size() > 3}" th:src="${homestay.images[3].imageUrl}" alt="Ảnh homestay">
+            <img th:unless="${homestay.images.size() > 3}" th:src="@{/images/gallery4-4.jpg}" alt="Ảnh homestay">
+        </div>
+        <div class="mosaic-item">
+            <img th:if="${homestay.images.size() > 4}" th:src="${homestay.images[4].imageUrl}" alt="Ảnh homestay">
+            <img th:unless="${homestay.images.size() > 4}" th:src="@{/images/gallery5-5.jpg}" alt="Ảnh homestay">
+        </div>
+    </div>
+
+    <div class="row g-5">
+        <!-- Left Column: Details & Rooms -->
+        <div class="col-lg-8">
+            <!-- Highlights -->
+            <div class="border-bottom pb-4 mb-4">
+                <div class="row g-3">
+                    <div class="col-md-4 d-flex align-items-center gap-3">
+                        <div class="p-3 bg-light rounded-circle text-primary fs-5">
+                            <i class="fa-solid fa-house-chimney-crack"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold m-0 small">Toàn bộ chỗ ở</h6>
+                            <small class="text-muted">Bạn có không gian riêng tư</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-center gap-3">
+                        <div class="p-3 bg-light rounded-circle text-success fs-5">
+                            <i class="fa-solid fa-key"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold m-0 small">Tự nhận phòng</h6>
+                            <small class="text-muted">Linh hoạt qua mã số khóa</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-center gap-3">
+                        <div class="p-3 bg-light rounded-circle text-warning fs-5">
+                            <i class="fa-solid fa-hand-sparkles"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold m-0 small">Vệ sinh nâng cao</h6>
+                            <small class="text-muted">Chuẩn khử khuẩn 5 bước</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="border-bottom pb-4 mb-4">
+                <h4 class="fw-bold mb-3">Giới thiệu chỗ ở</h4>
+                <p class="text-secondary leading-relaxed" style="white-space: pre-line;" th:text="${homestay.description}">
+                    Mô tả chi tiết về không gian, phong cảnh và tiện ích nổi bật của homestay...
+                </p>
+            </div>
+
+            <!-- Amenities -->
+            <div class="border-bottom pb-4 mb-4">
+                <h4 class="fw-bold mb-3">Tiện nghi có sẵn</h4>
+                <div class="row g-3" th:if="${!homestay.amenities.isEmpty()}">
+                    <div class="col-sm-6 col-12" th:each="a : ${homestay.amenities}">
+                        <div class="d-flex align-items-center gap-3 p-2 rounded-3 bg-light">
+                            <i class="fa-solid fa-circle-check text-success"></i>
+                            <span class="fw-semibold text-dark" th:text="${a.name}">Wifi tốc độ cao</span>
+                        </div>
+                    </div>
+                </div>
+                <p th:if="${homestay.amenities.isEmpty()}" class="text-muted small">Homestay hiện chưa cập nhật danh sách tiện nghi riêng.</p>
+            </div>
+
+            <!-- Room Selection List -->
+            <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h4 class="fw-bold m-0">Danh sách các phòng</h4>
+                        <small class="text-muted">Vui lòng chọn loại phòng phù hợp với số lượng thành viên trong đoàn</small>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column gap-3">
+                    <div th:each="room : ${homestay.rooms}" 
+                         class="room-card-box" 
+                         th:classappend="${room.status.name() != 'ACTIVE'} ? 'inactive' : ''">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <h5 class="fw-bold text-dark m-0" th:text="${room.name}">Phòng VIP Ban Công Hướng Hồ</h5>
+                                <span class="badge" 
+                                      th:classappend="${room.status.name() == 'ACTIVE'} ? 'bg-success-subtle text-success' : 'bg-secondary-subtle text-secondary'"
+                                      th:text="${room.status.name() == 'ACTIVE'} ? 'Còn phòng' : 'Hết phòng'">Còn phòng</span>
+                            </div>
+                            <div class="text-muted small d-flex flex-wrap gap-3 mt-2">
+                                <span><i class="fa-solid fa-user-group me-1 text-primary"></i>Tối đa <strong th:text="${room.maxGuests}">2</strong> khách</span>
+                                <span><i class="fa-solid fa-bed me-1 text-primary"></i>1 Giường đôi King size</span>
+                                <span><i class="fa-solid fa-wind me-1 text-primary"></i>Điều hòa & Tủ lạnh</span>
+                            </div>
+                        </div>
+                        <div class="text-end ps-3 border-start">
+                            <div class="card-price-block justify-content-end mb-2">
+                                <span class="card-price-amount text-danger" th:text="${#numbers.formatDecimal(room.pricePerNight,0,'POINT',0,'COMMA')}">850,000</span>
+                                <span class="card-price-unit fw-bold">VNĐ/đêm</span>
+                            </div>
+                            <a th:if="${room.status.name() == 'ACTIVE'}" 
+                               th:href="@{/khach-hang/dat-phong/moi(roomId=${room.id})}" 
+                               class="btn btn-primary btn-pill btn-sm px-4">
+                                <i class="fa-solid fa-check me-1"></i> Đặt phòng ngay
+                            </a>
+                            <button th:unless="${room.status.name() == 'ACTIVE'}" 
+                                    class="btn btn-secondary btn-pill btn-sm px-4 opacity-50" disabled>
+                                Tạm hết phòng
+                            </button>
+                        </div>
+                    </div>
+
+                    <div th:if="${homestay.rooms.isEmpty()}" class="p-4 bg-light text-center rounded-4">
+                        <i class="fa-solid fa-bed display-6 text-muted mb-2"></i>
+                        <p class="text-muted m-0">Hiện tại homestay chưa cập nhật bảng phòng trống.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Sticky Booking / Location Card -->
+        <div class="col-lg-4">
+            <div class="sticky-booking-widget">
+                <div class="d-flex justify-content-between align-items-baseline mb-3 pb-3 border-bottom">
+                    <div>
+                        <span class="fs-4 fw-bold text-danger">Giá phòng tốt nhất</span>
+                    </div>
+                    <div class="text-end">
+                        <span class="small text-muted"><i class="fa-solid fa-star text-warning"></i> 4.9 (42)</span>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-light rounded-3 mb-3 small">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted"><i class="fa-solid fa-clock me-1 text-primary"></i>Nhận phòng:</span>
+                        <span class="fw-semibold">Từ 14:00</span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted"><i class="fa-solid fa-clock-rotate-left me-1 text-primary"></i>Trả phòng:</span>
+                        <span class="fw-semibold">Trước 12:00</span>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 mb-3">
+                    <a href="#roomListSection" class="btn btn-primary btn-pill py-2 fw-bold" 
+                       onclick="window.scrollTo({top: document.querySelector('.room-card-box').offsetTop - 100, behavior: 'smooth'}); return false;">
+                        <i class="fa-solid fa-calendar-check me-2"></i>Chọn phòng ở phía dưới
+                    </a>
+                    <a th:if="${homestay.latitude != null}"
+                       th:href="@{https://www.google.com/maps(q=${homestay.latitude} + ',' + ${homestay.longitude})}"
+                       target="_blank" class="btn btn-outline-custom rounded-pill py-2">
+                        <i class="fa-solid fa-location-arrow text-danger me-2"></i>Chỉ đường qua Bản đồ
+                    </a>
+                </div>
+
+                <div class="border-top pt-3 text-center">
+                    <small class="text-muted d-block mb-2">Bạn cần tư vấn hoặc giải đáp thắc mắc?</small>
+                    <a href="tel:+84987654321" class="text-dark fw-bold small text-decoration-none">
+                        <i class="fa-solid fa-phone me-1 text-success"></i>Hotline: +84 987 654 321
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{dung-chung/layout :: footer}"></div>
+</body>
+</html>
